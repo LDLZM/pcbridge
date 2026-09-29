@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PCBridge 控制台</title>
+<style>
+body{margin:0;font-family:system-ui,"Microsoft YaHei",sans-serif;background:#f4f1ea;color:#2b2b2b}
+main{max-width:420px;margin:60px auto;padding:0 16px}
+section{background:#fff;border:1px solid #e2dcd0;border-radius:10px;padding:22px}
+h1{font-size:20px;margin:0 0 16px}
+label{display:block;font-size:14px;color:#8a8172;margin-bottom:6px}
+input[type=password]{width:100%;padding:9px 10px;border:1px solid #ddd2bd;border-radius:7px;font-size:15px;box-sizing:border-box}
+button{width:100%;margin-top:14px;background:#a8791f;color:#fff;border:0;border-radius:7px;padding:10px;cursor:pointer;font-size:15px}
+p{font-size:13px;color:#8a8172}
+</style>
+</head>
+<body>
+<main>
+<section>
+<h1>PCBridge 控制台</h1>
+<form method="post" action="login">
+<label>管理口令</label>
+<input type="password" name="token" autofocus>
+<button>进入</button>
+</form>
+<p>口令在服务器的配置文件里，只有你知道。</p>
+</section>
+</main>
+</body>
+</html>

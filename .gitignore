@@ -1,0 +1,12 @@
+# secrets & runtime data — never commit
+pcbridge.env
+data/
+*.env
+
+# python
+__pycache__/
+*.pyc
+
+# os junk
+.DS_Store
+Thumbs.db

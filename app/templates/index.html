@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PCBridge 控制台</title>
+<style>
+body{margin:0;font-family:system-ui,"Microsoft YaHei",sans-serif;background:#f4f1ea;color:#2b2b2b}
+header{background:#2b2b2b;color:#f4f1ea;padding:14px 22px;display:flex;justify-content:space-between;align-items:center}
+header h1{font-size:18px;margin:0}
+main{max-width:960px;margin:22px auto;padding:0 16px}
+section{background:#fff;border:1px solid #e2dcd0;border-radius:10px;padding:16px 18px;margin-bottom:18px}
+h2{font-size:15px;margin:0 0 12px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:7px 8px;border-bottom:1px solid #eee}
+th{color:#8a8172;font-weight:600}
+button{background:#a8791f;color:#fff;border:0;border-radius:7px;padding:7px 14px;cursor:pointer;font-size:13px}
+button.ghost{background:#fff;color:#a8791f;border:1px solid #a8791f}
+code.big{font-size:26px;letter-spacing:6px;background:#fdf8ec;padding:8px 14px;border:1px dashed #a8791f;border-radius:8px}
+[hidden]{display:none}
+.pill{display:inline-block;padding:2px 9px;border-radius:99px;font-size:12px}
+.on,.done{background:#e6f4e2;color:#2c6e27}
+.off,.rejected,.interrupted{background:#f1eae0;color:#8a8172}
+.failed{background:#fbe4de;color:#a8341f}
+.queued,.dispatched{background:#fdf3d7;color:#a8791f}
+a{color:#a8791f}
+.flash{background:#fdf8ec;border:1px dashed #a8791f;border-radius:10px;padding:16px 18px;margin-bottom:18px}
+</style>
+</head>
+<body>
+<header>
+<h1>PCBridge 控制台</h1>
+<form method="post" action="logout"><button class="ghost">退出</button></form>
+</header>
+<main>
+{% if code %}
+<div class="flash">
+<h2>新的配对码</h2>
+<code class="big">{{ code }}</code>
+<p>10 分钟内有效、一次性。在电脑的"手"窗口里输入它。过期就再出一个。</p>
+</div>
+{% endif %}
+
+<section>
+<h2>电脑（{{ devices|length }} 台）
+<form method="post" action="pair-code" style="float:right;margin:-4px 0 0"><button>添加电脑（出配对码）</button></form>
+</h2>
+<table>
+<tr><th>编号</th><th>名字</th><th>状态</th><th>最后在线</th><th>登记时间</th><th></th></tr>
+{% for d in devices %}
+<tr>
+<td>{{ d.id }}</td>
+<td>{{ d.name }}</td>
+<td>{% if d.revoked %}<span class="pill off">已吊销</span>{% elif d.online %}<span class="pill on">在线</span>{% else %}<span class="pill off">离线</span>{% endif %}</td>
+<td>{{ d.last_seen|ts }}</td>
+<td>{{ d.created|ts }}</td>
+<td>{% if not d.revoked %}
+<form method="post" action="revoke" onsubmit="return confirm('吊销后这台电脑立刻失效，确定？')">
+<input type="hidden" name="device_id" value="{{ d.id }}"><button class="ghost">吊销</button>
+</form>{% endif %}</td>
+</tr>
+{% else %}
+<tr><td colspan="6">还没有电脑。点右上角【添加电脑】出配对码。</td></tr>
+{% endfor %}
+</table>
+</section>
+
+<section>
+<h2>最近任务</h2>
+<table>
+<tr><th>任务号</th><th>电脑</th><th>类型</th><th>内容</th><th>状态</th><th>时间</th></tr>
+{% for t in tasks %}
+<tr>
+<td><a href="tasks/{{ t.id }}">{{ t.id }}</a></td>
+<td>{{ t.device_id }}</td>
+<td>{{ t.type }}</td>
+<td style="max-width:320px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ t.params }}</td>
+<td><span class="pill {{ t.status }}">{{ t.status }}</span></td>
+<td>{{ t.created|ts }}</td>
+</tr>
+{% else %}
+<tr><td colspan="6">还没有任务记录。</td></tr>
+{% endfor %}
+</table>
+</section>
+</main>
+</body>
+</html>

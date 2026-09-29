@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>任务 {{ t.id }} - PCBridge</title>
+<style>
+body{margin:0;font-family:system-ui,"Microsoft YaHei",sans-serif;background:#f4f1ea;color:#2b2b2b}
+header{background:#2b2b2b;color:#f4f1ea;padding:14px 22px;display:flex;justify-content:space-between;align-items:center}
+header h1{font-size:18px;margin:0}
+header a{color:#f4f1ea}
+main{max-width:960px;margin:22px auto;padding:0 16px}
+section{background:#fff;border:1px solid #e2dcd0;border-radius:10px;padding:16px 18px;margin-bottom:18px}
+h2{font-size:15px;margin:0 0 12px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:7px 8px;border-bottom:1px solid #eee}
+th{color:#8a8172;font-weight:600;width:110px}
+pre{background:#faf7f0;border:1px solid #eee;border-radius:8px;padding:12px;overflow:auto;font-size:13px;white-space:pre-wrap;word-break:break-word}
+.pill{display:inline-block;padding:2px 9px;border-radius:99px;font-size:12px}
+.done{background:#e6f4e2;color:#2c6e27}
+.failed{background:#fbe4de;color:#a8341f}
+.queued,.dispatched{background:#fdf3d7;color:#a8791f}
+.rejected,.interrupted{background:#f1eae0;color:#8a8172}
+a{color:#a8791f}
+</style>
+</head>
+<body>
+<header>
+<h1>任务 {{ t.id }}</h1>
+<a href="../">&#8592; 返回</a>
+</header>
+<main>
+<section>
+<h2>基本信息</h2>
+<table>
+<tr><th>电脑</th><td>{{ t.device_id }}</td></tr>
+<tr><th>类型</th><td>{{ t.type }}</td></tr>
+<tr><th>状态</th><td><span class="pill {{ t.status }}">{{ t.status }}</span></td></tr>
+<tr><th>创建</th><td>{{ t.created|ts }}</td></tr>
+<tr><th>派发</th><td>{{ t.dispatched|ts }}</td></tr>
+<tr><th>完成</th><td>{{ t.finished|ts }}</td></tr>
+</table>
+</section>
+<section>
+<h2>参数</h2>
+<pre>{{ params_pretty }}</pre>
+</section>
+<section>
+<h2>回传结果</h2>
+<pre>{{ t.output or '(无)' }}</pre>
+{% if has_file %}<p><a href="file">下载这台电脑传回的文件</a></p>{% endif %}
+</section>
+</main>
+</body>
+</html>
